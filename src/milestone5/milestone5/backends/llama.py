@@ -1,12 +1,9 @@
-import rclpy
-from rclpy.node import Node
-
 from llama_cpp import Llama
 from pathlib import Path
 from typing import Union
 
 
-class LlamaPublisher():
+class LlamaBackend():
 
     def __init__(
             self,
@@ -44,23 +41,3 @@ class LlamaPublisher():
             stream=stream
         )
         return response['choices'][0]['text'].strip()
-
-def main(args=None):
-    rclpy.init(args=args)
-    node = LlamaPublisher()
-
-    try:
-        while rclpy.ok():
-            node.step()
-            node.display()
-            rclpy.spin_once(node, timeout_sec=0.0)
-            # Wait for key press to break loop: ESC
-            if cv2.waitKey(1) == 27:
-                break
-    finally:
-        node.destroy_node()
-        rclpy.shutdown()
-
-
-if __name__ == '__main__':
-    main()
