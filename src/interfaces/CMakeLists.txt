@@ -35,7 +35,9 @@ endif()
 find_package(rosidl_default_generators REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
-  "action/Fibonacci.action"
+  "action/Espeak.action"
+  "action/Llama.action"
+  "action/Whisper.action"
 )
 
 ament_package()
