@@ -15,18 +15,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import sys
-import select
 
 import rclpy
 from rclpy.action import ActionClient
 from rclpy.node import Node
 
+from .util import (
+    record_audio_and_saveas,
+    get_user_input,
+    prompt_assistant
+)
 from interfaces.action import (
     EspeakAction,
     LlamaAction,
     WhisperAction
 )
+
 
 class ML5Client(Node):
     """
@@ -34,23 +38,11 @@ class ML5Client(Node):
     """
     def __init__(self):
         super().__init__('m5_client')
-        self._espeak_client = ActionClient(
-            self,
-            EspeakAction,
-            'espeak_action'
-        )
-        self._llama_client = ActionClient(
-            self,
-            LlamaAction,
-            'llama_action'
-        )
-        self._whisper_client = ActionClient(
-            self,
-            WhisperAction,
-            'whisper_action'
-        )
+        self._espeak_client = ActionClient(self, EspeakAction, 'espeak_action')
+        self._llama_client = ActionClient(self, LlamaAction, 'llama_action')
+        self._whisper_client = ActionClient(self, WhisperAction, 'whisper_action')
 
-    def _request(
+    def _request_blocking(
             self,
             client,
             ActionType,
@@ -65,23 +57,16 @@ class ML5Client(Node):
             request,
             feedback_callback=self._feedback_callback
         )
-        send_goal_future.add_done_callback(self._response_callback)
+        rclpy.spin_until_future_complete(self, send_goal_future)
+        result = send_goal_future.result()
 
-    def _response_callback(self, future):
-        goal = future.result()
+        if not result.accepted:
+            self.get_logger().warn('Goal rejected')
+            return None
 
-        if not goal.accepted:
-            self.get_logger().info('rejected')
-            return
+        self.get_logger().info('Goal accepted')
 
-        self.get_logger().info('accepted')
-        self._get_result_future = goal.get_result_async()
-        self._get_result_future.add_done_callback(self._result_callback)
-
-    def _result_callback(self, future):
-        result = future.result().result
-        self.get_logger().info('Result: {0}'.format(result.sequence))
-        rclpy.shutdown()
+        return result
 
     def _feedback_callback(self, feedback_msg):
         feedback = feedback_msg.feedback
@@ -95,56 +80,44 @@ class ML5Client(Node):
         assert client in ['espeak', 'llama', 'whisper'], \
             f"Client must be one of 'espeak', 'llama', or 'whisper', got '{client}'"
 
+        result = None
         if client == 'espeak':
-            self._request(
-                self._espeak_client,
-                EspeakAction,
-                'text',
-                request
+            result = self._request_blocking(
+                self._espeak_client, EspeakAction, 'text', request
             )
         elif client == 'llama':
-            self._request(
-                self._llama_client,
-                LlamaAction,
-                'prompt',
-                request
+            result = self._request_blocking(
+                self._llama_client, LlamaAction, 'prompt', request
             )
         elif client == 'whisper':
-            self._request(
-                self._whisper_client,
-                WhisperAction,
-                'file_name',
-                request
+            result = self._request_blocking(
+                self._whisper_client, WhisperAction, 'file_name', request
             )
 
-
-def get_user_input(client):
-    sys.stdout.write("\nYou (type or 's'/wait→voice): ")
-    sys.stdout.flush()
-    ready, _, _ = select.select([sys.stdin], [], [], 5)
-    if ready:
-        line = sys.stdin.readline().strip()
-        if   line.lower() in ("exit", "quit"):
-            return None
-        elif line.lower() == "s":
-            client("espeak", "speak in voice now")
-        else:
-            return line
-    # timeout or explicit 's'
-    
-    return txt
+        return result
 
 
 def main(args=None):
     rclpy.init(args=args)
+
     client = ML5Client()
+    file_name = "voice_input.wav"
 
     while True:
-        user_text = get_user_input()
-        if user_text is None:
+        user_input = get_user_input()
+        if user_input is None:
             break
 
-    server.destroy_node()
+        if user_input.lower() == "s":
+            # Record audio from microphone
+            client("espeak", "speak in voice now")
+            record_audio_and_saveas(file_name)
+            # Transcribe audio file with whisper
+            user_input = client("whisper", file_name)
+
+        prompt_assistant(client, user_input)
+
+    client.destroy_node()
     rclpy.shutdown()
 
 
