@@ -31,7 +31,9 @@ sh install-ros2-foxy-desktop.sh
 
 ### Building the Project
 
+Ensure you are in the project's root directory, then run:
+
 ```sh
-sh build.sh
+colcon build --symlink
 . install/setup.sh
 ```
