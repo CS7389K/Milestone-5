@@ -16,38 +16,124 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.import time
 
-import time
-
-from interfaces.action import Action
 
 import rclpy
 from rclpy.action import ActionServer
 from rclpy.node import Node
 
+from interfaces.action import (
+    Espeak,
+    Llama,
+    Whisper
+)
+from .backends import (
+    EspeakBackend,
+    LlamaBackend,
+    WhisperBackend
+)
 
 class ML5Server(Node):
+    """
+    Message Types: https://docs.ros2.org/foxy/api/std_msgs/index-msg.html
+    """
 
     def __init__(self):
         super().__init__('ml5_server')
-        self._action_server = ActionServer(
+        # Start all of the action servers
+        self._espeak_server = ActionServer(
             self,
-            Action,
-            'action',
-            self.execute_callback
+            Espeak,
+            'espeak_action',
+            self._callback_espeak
+        )
+        self._llama_server = ActionServer(
+            self,
+            Llama,
+            'llama_action',
+            self._callback_llama
+        )
+        self._whisper_server = ActionServer(
+            self,
+            Whisper,
+            'whisper_action',
+            self._callback_whisper
+        )
+        # Create model wrappers
+        self._espeak = EspeakBackend()
+        self._llama = LlamaBackend()
+        self._whisper = WhisperBackend()
+
+    def _call_backend(
+            self,
+            ctx,
+            backend,
+            request_attr,
+            result_attr,
+            feedback_attr,
+            ResultType,
+            FeedbackType
+        ):
+        error = ""
+        try:
+            backend_result = backend(getattr(ctx.request, request_attr))
+            ctx.succeed()
+        except Exception as e:
+            error = str(e)
+            ctx.failed()
+
+        feedback = FeedbackType()
+        setattr(feedback, feedback_attr, error)
+        feedback.feedback = error
+        ctx.publish_feedback(feedback)
+
+        result = ResultType()
+        setattr(result, result_attr, backend_result)
+        # ctx.publish_result(result)
+
+        return result
+
+    def _callback_espeak(self, ctx):
+        self._call_backend(
+            ctx,
+            self._espeak,
+            "text",
+            "result",
+            "feedback",
+            Espeak.Result,
+            Espeak.Feedback
         )
 
-    def process(self, goal):
-        pass
+    def _callback_llama(self, ctx):
+        self._call_backend(
+            ctx,
+            self._llama,
+            "prompt",
+            "response",
+            "feedback",
+            Llama.Result,
+            Llama.Feedback
+        )
+
+    def _callback_whisper(self, ctx):
+        self._call_backend(
+            ctx,
+            self._whisper,
+            "file_name",
+            "text",
+            "feedback",
+            Whisper.Result,
+            Whisper.Feedback
+        )
 
 
 def main(args=None):
     rclpy.init(args=args)
     server = ML5Server()
 
-    try:
-        rclpy.spin(server)
-    except KeyboardInterrupt:
-        pass
+    rclpy.spin(server)
+
+    server.destroy_node()
+    rclpy.shutdown()
 
 
 if __name__ == '__main__':
