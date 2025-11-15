@@ -21,7 +21,7 @@ cd Milestone-5
 
 2. ROS2 Foxy requires Ubuntu 20.04, so ensure it's what you're using. If you're using windows, run the following to use WSL:
 ```sh
-install-wsl2-ros2-env.bat
+wsl --install -d Ubuntu-20.04
 ```
 
 3. Install Foxy
