@@ -24,6 +24,11 @@ cd Milestone-5
 wsl --install -d Ubuntu-20.04
 ```
 
+If you need to move WSL to a different drive (e.g. the F drive):
+```
+wsl --manage Ubuntu-20.04 --move F:\WSL
+```
+
 3. Install Foxy
 ```sh
 sh install-ros2-foxy-desktop.sh
