@@ -15,16 +15,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.import time
-
-
 import rclpy
 from rclpy.action import ActionServer
 from rclpy.node import Node
 
 from interfaces.action import (
-    Espeak,
-    Llama,
-    Whisper
+    EspeakAction,
+    LlamaAction,
+    WhisperAction
 )
 from .backends import (
     EspeakBackend,
@@ -36,29 +34,28 @@ class ML5Server(Node):
     """
     Message Types: https://docs.ros2.org/foxy/api/std_msgs/index-msg.html
     """
-
     def __init__(self):
-        super().__init__('ml5_server')
+        super().__init__('m5_server')
         # Start all of the action servers
         self._espeak_server = ActionServer(
             self,
-            Espeak,
+            EspeakAction,
             'espeak_action',
             self._callback_espeak
         )
         self._llama_server = ActionServer(
             self,
-            Llama,
+            LlamaAction,
             'llama_action',
             self._callback_llama
         )
         self._whisper_server = ActionServer(
             self,
-            Whisper,
+            WhisperAction,
             'whisper_action',
             self._callback_whisper
         )
-        # Create model wrappers
+        # Initialize model backends
         self._espeak = EspeakBackend()
         self._llama = LlamaBackend()
         self._whisper = WhisperBackend()
@@ -88,7 +85,6 @@ class ML5Server(Node):
 
         result = ResultType()
         setattr(result, result_attr, backend_result)
-        # ctx.publish_result(result)
 
         return result
 
@@ -99,8 +95,8 @@ class ML5Server(Node):
             "text",
             "result",
             "feedback",
-            Espeak.Result,
-            Espeak.Feedback
+            EspeakAction.Result,
+            EspeakAction.Feedback
         )
 
     def _callback_llama(self, ctx):
@@ -110,8 +106,8 @@ class ML5Server(Node):
             "prompt",
             "response",
             "feedback",
-            Llama.Result,
-            Llama.Feedback
+            LlamaAction.Result,
+            LlamaAction.Feedback
         )
 
     def _callback_whisper(self, ctx):
@@ -121,8 +117,8 @@ class ML5Server(Node):
             "file_name",
             "text",
             "feedback",
-            Whisper.Result,
-            Whisper.Feedback
+            WhisperAction.Result,
+            WhisperAction.Feedback
         )
 
 
