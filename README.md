@@ -7,7 +7,7 @@ In this milestone, you will learn how to use a voice recognition neural network,
 ### Foxy
 - [Installation](https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html)
 - [Building Packages](https://docs.ros.org/en/foxy/Tutorials/Beginner-Client-Libraries/Colcon-Tutorial.html)
-- [Publisher/Subscriber](https://docs.ros.org/en/foxy/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html)
+- [Action Server/Client](https://docs.ros.org/en/foxy/Tutorials/Intermediate/Writing-an-Action-Server-Client/Py.html)
 
 ## Development Environment
 
