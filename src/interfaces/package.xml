@@ -3,9 +3,9 @@
 <package format="3">
   <name>interfaces</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="andrew@todo.todo">andrew</maintainer>
-  <license>TODO: License declaration</license>
+  <description>Whisper, Espeak, and LLaMA on an NVIDIA Jetson Xavier NX actions</description>
+  <maintainer email="yzb2@txstate.edu">Andrew Scouten</maintainer>
+  <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <buildtool_depend>rosidl_default_generators</buildtool_depend>

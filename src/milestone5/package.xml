@@ -3,7 +3,7 @@
 <package format="3">
   <name>milestone5</name>
   <version>0.0.0</version>
-  <description>Whisper, Espeak, and LLaMA on an NVIDIA Jetson Xavier NX with a publisher / subscriber to the TurtleBot3.</description>
+  <description>Whisper, Espeak, and LLaMA on an NVIDIA Jetson Xavier NX with a action server / client to the TurtleBot3.</description>
   <maintainer email="yzb2@txstate.edu">Andrew Scouten</maintainer>
   <license>MIT</license>
 
