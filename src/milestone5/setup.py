@@ -20,6 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'server = milestone5.server:main',
+            'client = milestone5.client:main',
         ],
     },
 )
