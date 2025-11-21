@@ -34,31 +34,41 @@ class ML5Server(Node):
     """
     Message Types: https://docs.ros2.org/foxy/api/std_msgs/index-msg.html
     """
-    def __init__(self):
+    def __init__(
+            self,
+            use_espeak = True,
+            use_whisper = True,
+            use_llama = True,
+        ):
         super().__init__('m5_server')
+        self.use_espeak = use_espeak
+        self.use_whisper = use_whisper
+        self.use_llama = use_llama
         # Start all of the action servers
-        self._espeak_server = ActionServer(
-            self,
-            EspeakAction,
-            'espeak_action',
-            self._callback_espeak
-        )
-        self._llama_server = ActionServer(
-            self,
-            LlamaAction,
-            'llama_action',
-            self._callback_llama
-        )
-        self._whisper_server = ActionServer(
-            self,
-            WhisperAction,
-            'whisper_action',
-            self._callback_whisper
-        )
-        # Initialize model backends
-        self._espeak = EspeakBackend()
-        self._llama = LlamaBackend()
-        self._whisper = WhisperBackend()
+        if use_espeak:
+            self._espeak = EspeakBackend()
+            self._espeak_server = ActionServer(
+                self,
+                EspeakAction,
+                'espeak_action',
+                self._callback_espeak
+            )
+        if use_llama:
+            self._llama = LlamaBackend()
+            self._llama_server = ActionServer(
+                self,
+                LlamaAction,
+                'llama_action',
+                self._callback_llama
+            )
+        if use_whisper:
+            self._whisper = WhisperBackend()
+            self._whisper_server = ActionServer(
+                self,
+                WhisperAction,
+                'whisper_action',
+                self._callback_whisper
+            )
 
     def _call_backend(
             self,
@@ -89,6 +99,9 @@ class ML5Server(Node):
         return result
 
     def _callback_espeak(self, ctx):
+        if not self.use_espeak:
+            ctx.failed()
+            return EspeakAction.Result()
         self._call_backend(
             ctx,
             self._espeak,
@@ -100,6 +113,9 @@ class ML5Server(Node):
         )
 
     def _callback_llama(self, ctx):
+        if not self.use_llama:
+            ctx.failed()
+            return LlamaAction.Result()
         self._call_backend(
             ctx,
             self._llama,
@@ -111,6 +127,9 @@ class ML5Server(Node):
         )
 
     def _callback_whisper(self, ctx):
+        if not self.use_whisper:
+            ctx.failed()
+            return WhisperAction.Result()
         self._call_backend(
             ctx,
             self._whisper,

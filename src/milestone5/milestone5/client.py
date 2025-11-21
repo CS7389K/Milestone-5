@@ -36,11 +36,22 @@ class ML5Client(Node):
     """
     Message Types: https://docs.ros2.org/foxy/api/std_msgs/index-msg.html
     """
-    def __init__(self):
+    def __init__(
+            self,
+            use_espeak = True,
+            use_whisper = True,
+            use_llama = True,
+        ):
         super().__init__('m5_client')
-        self._espeak_client = ActionClient(self, EspeakAction, 'espeak_action')
-        self._llama_client = ActionClient(self, LlamaAction, 'llama_action')
-        self._whisper_client = ActionClient(self, WhisperAction, 'whisper_action')
+        self.use_espeak = use_espeak
+        self.use_whisper = use_whisper
+        self.use_llama = use_llama
+        if use_espeak:
+            self._espeak_client = ActionClient(self, EspeakAction, 'espeak_action')
+        if use_llama:
+            self._llama_client = ActionClient(self, LlamaAction, 'llama_action')
+        if use_whisper:
+            self._whisper_client = ActionClient(self, WhisperAction, 'whisper_action')
 
     def _request_blocking(
             self,
@@ -81,15 +92,15 @@ class ML5Client(Node):
             f"Client must be one of 'espeak', 'llama', or 'whisper', got '{client}'"
 
         result = None
-        if client == 'espeak':
+        if client == 'espeak' and self.use_espeak:
             result = self._request_blocking(
                 self._espeak_client, EspeakAction, 'text', request
             )
-        elif client == 'llama':
+        elif client == 'llama' and self.use_llama:
             result = self._request_blocking(
                 self._llama_client, LlamaAction, 'prompt', request
             )
-        elif client == 'whisper':
+        elif client == 'whisper' and self.use_whisper:
             result = self._request_blocking(
                 self._whisper_client, WhisperAction, 'file_name', request
             )
