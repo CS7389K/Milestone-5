@@ -35,9 +35,9 @@ endif()
 find_package(rosidl_default_generators REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
-  "action/EspeakAction.action",
-  "action/LlamaAction.action",
-  "action/WhisperAction.action"
+  "src/action/EspeakAction.action"
+  "src/action/LlamaAction.action"
+  "src/action/WhisperAction.action"
 )
 
 ament_package()
