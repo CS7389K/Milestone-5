@@ -72,10 +72,10 @@ class ML5Client(Node):
         result = send_goal_future.result()
 
         if not result.accepted:
-            self.get_logger().warn('Goal rejected')
+            self.get_logger().warn(f"{str(type(ActionType))} request rejected")
             return None
 
-        self.get_logger().info('Goal accepted')
+        self.get_logger().info(f"{str(type(ActionType))} request accepted")
 
         return result
 
@@ -111,7 +111,11 @@ class ML5Client(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    client = ML5Client()
+    client = ML5Client(
+        use_espeak=True,
+        use_llama=False,
+        use_whisper=True
+    )
     file_name = "voice_input.wav"
 
     while True:
