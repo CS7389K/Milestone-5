@@ -111,11 +111,13 @@ class ML5Client(Node):
 def main(args=None):
     rclpy.init(args=args)
 
+    print("Initializing ML5 Client Node...")
     client = ML5Client(
         use_espeak=True,
         use_llama=False,
         use_whisper=True
     )
+    print("ML5 Client Node Initialized.")
     file_name = "voice_input.wav"
 
     while True:

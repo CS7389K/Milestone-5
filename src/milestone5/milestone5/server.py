@@ -144,11 +144,14 @@ class ML5Server(Node):
 
 def main(args=None):
     rclpy.init(args=args)
+
+    print("Initializing ML5 Server Node...")
     server = ML5Server(
         use_espeak=True,
         use_llama=False,
         use_whisper=True
     )
+    print("ML5 Server Node Initialized.")
 
     rclpy.spin(server)
 
