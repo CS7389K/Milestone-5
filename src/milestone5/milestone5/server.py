@@ -62,7 +62,8 @@ class ML5Server(Node):
                 self._callback_llama
             )
         if use_whisper:
-            self._whisper = WhisperBackend()
+            device = "cuda" if not use_llama else "cpu"
+            self._whisper = WhisperBackend(device=device)
             self._whisper_server = ActionServer(
                 self,
                 WhisperAction,
