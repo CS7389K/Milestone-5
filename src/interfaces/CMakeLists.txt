@@ -40,4 +40,6 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "src/action/WhisperAction.action"
 )
 
+ament_export_dependencies(rosidl_default_runtime)
+
 ament_package()
