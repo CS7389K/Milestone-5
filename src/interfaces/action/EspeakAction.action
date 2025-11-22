@@ -2,4 +2,4 @@ string text
 ---
 bool result
 ---
-bool feedback
+string feedback
