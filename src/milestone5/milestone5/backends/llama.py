@@ -7,7 +7,7 @@ class LlamaBackend():
 
     def __init__(
             self,
-            model_path : Union[Path, str],
+            model_path : Union[Path, str] = "~/llama.cpp/models/llama-2-7b-chat.Q4_K_M.gguf",
             n_ctx : int = 512,
             n_threads : int = 4,
             n_gpu_layers : int = 33,
