@@ -30,7 +30,6 @@ def prompt_assistant(
         client,
         prompt : str
     ) -> Optional[str]:
-    print("Assistant: ", end="", flush=True)
     response = client("llama", prompt).strip()
     print("Prompt:", prompt)
     print("Response:", response)
