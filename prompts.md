@@ -18,8 +18,10 @@ Example 3
 Scene: A user wants to cut paper. Objects on the desk: an eraser, a pair of scissors, a coffee mug.
 Robot Action: Deliver the scissors safely to the user.
 
-Task: The user is thirsty. On a table in front of you are four objects: a hat, a computer mouse, a toaster, and a water bottle full of water. How can Turtlebot3 with a manipulator arm help the user?
-Robot Action:
+Task: The user is thirsty. On a table in front of you are four objects: a hat, a computer mouse, a toaster, and a water bottle full of water. How can Turtlebot3 with a manipulator arm help the user? 
+
+Make your response concise, only stating the steps that should be taken.
+END
 ```
 
 ### Prompt Two - Physical reasoning examples
@@ -44,31 +46,42 @@ Correct action: Deliver the cup of water.
 Now your turn:
 User need: The user is thirsty. On a table in front of you are four objects: a hat, a computer mouse, a toaster, and a water bottle full of water. How can Turtlebot3 with a manipulator arm help the user?
 Objects: hat, computer mouse, toaster, water bottle full of water.
-Correct action:
+
+Make your response concise, only stating the steps that should be taken.
+END
 ```
 
 ## Chain of Thought
 
 ### Prompt One - Affordance reasoning steps
 ```
+Task: The user is thirsty. On a table in front of you are four objects: a hat, a computer mouse, a toaster, and a water bottle full of water. How can Turtlebot3 with a manipulator arm help the user?
+
 Think step-by-step about how a service robot should help.
 1. Identify the user’s need.
 2. Determine which object on the table satisfies that need.
 3. Check whether TurtleBot3’s manipulator can grasp and deliver the object.
 4. Produce a concise action plan.
 
-Task: The user is thirsty. On a table in front of you are four objects: a hat, a computer mouse, a toaster, and a water bottle full of water. How can Turtlebot3 with a manipulator arm help the user?
 Provide the 4-step reasoning and final robot action.
+
+Make your response concise, only stating the steps that should be taken.
+END
 ```
 
 ### Prompt Two - “Task decomposition for robot behavior”
 ```
+Apply the template to this problem:
+The user is thirsty. On a table in front of you are four objects: a hat, a computer mouse, a toaster, and a water bottle full of water. How can Turtlebot3 with a manipulator arm help the user?
+
 Break down the problem using the following reasoning template:
 1. Goal understanding: What does the user want?
 2. Object relevance: Which object can satisfy that goal?
 3. Robot capabilities: Can TurtleBot3 grasp, lift, and deliver it?
 4. Execution plan: What sequence of actions should the robot take?
 
-Apply the template to this problem:
-The user is thirsty. On a table in front of you are four objects: a hat, a computer mouse, a toaster, and a water bottle full of water. How can Turtlebot3 with a manipulator arm help the user?
+Provide the 4-step reasoning and final robot action.
+
+Make your response concise, only stating the steps that should be taken.
+END
 ```
