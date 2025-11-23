@@ -15,7 +15,7 @@ class LlamaBackend():
         ):
         if isinstance(model_path, str):
             model_path = Path(model_path)
-        assert not model_path.is_file(), f"Model path '{model_path}' is not a valid file."
+        assert not model_path.exists(), f"Model path '{model_path}' is not a valid file."
 
         self.llm = Llama(
             model_path=str(model_path),
