@@ -42,5 +42,5 @@ class LlamaBackend():
             top_p=top_p,
             stream=stream
         )
-        response = [c["choices"][0]["text"] for c in chunks]
+        response = "".join([c["choices"][0]["text"] for c in chunks])
         return response
