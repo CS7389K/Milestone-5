@@ -11,7 +11,8 @@ class LlamaBackend():
             n_ctx : int = 512,
             n_threads : int = 4,
             n_gpu_layers : int = 33,
-            use_mlock : bool = False,
+            seed=42,
+            use_mlock : bool = True,
         ):
         if isinstance(model_path, str):
             model_path = Path(model_path)
@@ -22,6 +23,7 @@ class LlamaBackend():
             n_ctx=n_ctx,
             n_threads=n_threads,
             n_gpu_layers=n_gpu_layers,
+            seed=seed,
             use_mlock=use_mlock,
         )
 
