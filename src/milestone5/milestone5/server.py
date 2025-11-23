@@ -103,7 +103,7 @@ class ML5Server(Node):
         if not self.use_espeak:
             ctx.failed()
             return EspeakAction.Result()
-        self._call_backend(
+        return self._call_backend(
             ctx,
             self._espeak,
             "text",
@@ -117,7 +117,7 @@ class ML5Server(Node):
         if not self.use_llama:
             ctx.failed()
             return LlamaAction.Result()
-        self._call_backend(
+        return self._call_backend(
             ctx,
             self._llama,
             "prompt",
@@ -131,7 +131,7 @@ class ML5Server(Node):
         if not self.use_whisper:
             ctx.failed()
             return WhisperAction.Result()
-        self._call_backend(
+        return self._call_backend(
             ctx,
             self._whisper,
             "file_name",
