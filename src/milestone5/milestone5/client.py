@@ -141,8 +141,8 @@ def main(args=None):
         if use_llama:
             prompt_assistant(client, user_input)
         else:
-            client("espeak:", "Robot speaking.")
-            client("espeak:", user_input)
+            client("espeak", "Robot speaking.")
+            client("espeak", user_input)
 
     client.destroy_node()
     rclpy.shutdown()
