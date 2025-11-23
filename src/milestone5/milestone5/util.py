@@ -25,24 +25,19 @@ def get_user_input(
         client,
         file_name : str = "voice_input.wav",
     ) -> Optional[str]:
-    # Prompt user for input
-    sys.stdout.write("\nYou (type or 's'→voice): ")
-    sys.stdout.flush()
     # Get user input
-    ready, _, _ = select.select([sys.stdin], [], [], 5)
-    if ready:
-        text = sys.stdin.readline().strip()
-        if text.lower() in ("exit", "quit"):
-            return None
+    text = input("You (type or 's'→voice): ")
+    if text.lower() in ("exit", "quit"):
+        return None
 
-        elif text.lower() == "s":
-            client("espeak", "speak in voice now")
-            # Record audio from microphone
-            record_audio_and_saveas(file_name)
-            # Transcribe audio file with whisper
-            text = client("whisper", file_name)
+    elif text.lower() == "s":
+        client("espeak", "speak in voice now")
+        # Record audio from microphone
+        record_audio_and_saveas(file_name)
+        # Transcribe audio file with whisper
+        text = client("whisper", file_name)
 
-        return text
+    return text
 
 
 def prompt_assistant(
