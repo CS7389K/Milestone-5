@@ -45,6 +45,19 @@ class ML5Server(Node):
         self.use_llama = self.get_parameter('use_llama').value
         self.use_whisper = self.get_parameter('use_whisper').value
         self.llama_instruct = self.get_parameter('llama_instruct').value
+
+        if not self.use_llama and self.llama_instruct:
+            self.get_logger().warn(
+                "Parameter 'llama_instruct' is set to True but 'use_llama' is False. "
+                "Llama instruct mode will be ignored because llama is not in use."
+            )
+
+        if self.use_llama and self.use_whisper:
+            self.get_logger().warn(
+                "Both 'use_llama' and 'use_whisper' are set to True. "
+                "This may lead to high GPU memory usage depending on the model sizes."
+            )
+
         # Start all of the action servers
         if self.use_espeak:
             self._espeak = EspeakBackend()
