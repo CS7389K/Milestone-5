@@ -32,14 +32,5 @@ def prompt_assistant(
         prompt : str
     ) -> Optional[str]:
     print("Assistant: ", end="", flush=True)
-    buf = ""
-    for chunk in client("llama", prompt):
-        token = chunk["choices"][0]["text"]
-        buf += token
-        print(token, end="", flush=True)
-        if token.endswith((" ", ".", "?", "!")):
-            client("espeak", buf)
-            buf = ""
-    if buf.strip():
-        client("espeak", buf)
-    print()
+    response = client("llama", prompt).strip()
+    client("espeak", response)
