@@ -77,7 +77,7 @@ class ML5Client(Node):
 
         self.get_logger().info(f"{str(type(ActionType))} request accepted")
 
-        return result.result
+        return result
 
     def _feedback_callback(self, feedback_msg):
         feedback = feedback_msg.feedback
