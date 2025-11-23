@@ -39,7 +39,7 @@ class ML5Server(Node):
         self.declare_parameter('use_espeak', True)
         self.declare_parameter('use_llama', False)
         self.declare_parameter('use_whisper', True)
-        self.declare_parameter('llama_instruct', True)
+        self.declare_parameter('llama_instruct', False)
 
         self.use_espeak = self.get_parameter('use_espeak').value
         self.use_llama = self.get_parameter('use_llama').value
@@ -111,9 +111,13 @@ class ML5Server(Node):
         result = ResultType()
         setattr(result, result_attr, backend_result)
 
+        self.get_logger().info(f"Completed {str(type(backend))} request.")
+        self.get_logger().info(f"Result: {backend_result}")
+
         return result
 
     def _callback_espeak(self, ctx):
+        self.get_logger().info(f"Received espeak request: text={ctx.request.text}")
         if not self.use_espeak:
             ctx.failed()
             return EspeakAction.Result()
@@ -128,6 +132,7 @@ class ML5Server(Node):
         )
 
     def _callback_llama(self, ctx):
+        self.get_logger().info(f"Received llama request: prompt={ctx.request.prompt}")
         if not self.use_llama:
             ctx.failed()
             return LlamaAction.Result()
@@ -142,6 +147,7 @@ class ML5Server(Node):
         )
 
     def _callback_whisper(self, ctx):
+        self.get_logger().info(f"Received whisper request: file_name={ctx.request.file_name}")
         if not self.use_whisper:
             ctx.failed()
             return WhisperAction.Result()
