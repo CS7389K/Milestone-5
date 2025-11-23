@@ -69,13 +69,17 @@ class ML5Client(Node):
             feedback_callback=self._feedback_callback
         )
         rclpy.spin_until_future_complete(self, send_goal_future)
-        result = send_goal_future.result()
+        goal_handle = send_goal_future.result()
 
-        if not result.accepted:
+        if not goal_handle.accepted:
             self.get_logger().warn(f"{str(type(ActionType))} request rejected")
             return None
 
         self.get_logger().info(f"{str(type(ActionType))} request accepted")
+
+        result_future = goal_handle.get_result_async()
+        rclpy.spin_until_future_complete(self, result_future)
+        result = result_future.result().result
 
         return result
 
