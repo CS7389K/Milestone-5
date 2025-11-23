@@ -40,11 +40,13 @@ class ML5Server(Node):
         self.declare_parameter('use_llama', False)
         self.declare_parameter('use_whisper', False)
         self.declare_parameter('llama_instruct', False)
+        self.declare_parameter('llama_model_path', "")
 
         self.use_espeak = self.get_parameter('use_espeak').value
         self.use_llama = self.get_parameter('use_llama').value
         self.use_whisper = self.get_parameter('use_whisper').value
         self.llama_instruct = self.get_parameter('llama_instruct').value
+        self.llama_model_path = self.get_parameter('llama_model_path').value
 
         if not self.use_espeak and not self.use_whisper and not self.use_whisper:
             self.get_logger().warn(
@@ -74,7 +76,10 @@ class ML5Server(Node):
                 self._callback_espeak
             )
         if self.use_llama:
-            self._llama = LlamaBackend(instruct=self.llama_instruct)
+            if self.llama_model_path != "":
+                self._llama = LlamaBackend(model_path=self.llama_model_path)
+            else:
+                self._llama = LlamaBackend(instruct=self.llama_instruct)
             self._llama_server = ActionServer(
                 self,
                 LlamaAction,

@@ -48,15 +48,22 @@ colcon build --symlink-install
 #### Server
 Using ESpeak and Whisper only:
 ```sh
-ros2 run milestone5 server --ros-args -p use_espeak:=true use_llama:=false -p use_whisper:=true -p
+ros2 run milestone5 server --ros-args -p use_espeak:=true use_whisper:=true -p
 ```
 
 Using Llama's instruct model (for chat model, set `llama_instruct:=false`)
 ```sh
-ros2 run milestone5 server --ros-args -p use_espeak:=true use_llama:=true -p use_whisper:=false -p llama_instruct:=true
+ros2 run milestone5 server --ros-args -p use_espeak:=true use_llama:=true -p llama_instruct:=true
 ```
 
-**NOTE**: It is not advised to use both Whisper and Llama due to GPU, CPU, and RAM limitations
+##### Notes
+- It is not advised to use both Whisper and Llama due to GPU, CPU, and RAM limitations
+- If `llama_model_path` is specified, it will use that. If not, the system will use the following from `LlamaBackend` based on whether `llama_instruct` is `true` or `false`:
+
+    ```python
+    _MODEL_CHAT_PATH = "/home/nvidia/llama.cpp/models/llama-2-7b-chat.Q4_K_M.gguf"
+    _MODEL_INSTRUCT_PATH = "/home/nvidia/llama.cpp/models/llama-2-7b-instruct-q4_0.gguf"
+    ```
 
 #### Client
 ```sh
