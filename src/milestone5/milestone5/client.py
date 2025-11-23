@@ -130,8 +130,7 @@ def main(args=None):
 
         if user_input != "s":
             while user_input != "END":
-                if user_input != "END":
-                    final_input += user_input + "\n"
+                final_input += user_input + "\n"
                 user_input = get_user_input()
 
         if final_input == "s":
