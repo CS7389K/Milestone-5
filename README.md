@@ -39,6 +39,17 @@ sh install-ros2-foxy-desktop.sh
 Ensure you are in the project's root directory, then run:
 
 ```sh
-colcon build --symlink
+colcon build --symlink-install
 . install/setup.sh
 ```
+
+### Running the Client / Server Nodes
+
+#### Server
+```sh
+ros2 run milestone5 server --ros-args -p use_espeak:=true use_llama:=false -p use_whisper:=true
+```
+
+#### Client
+
+ros2 run milestone5 client --ros-args -p use_espeak:=true use_llama:=false -p use_whisper:=true
