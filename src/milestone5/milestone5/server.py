@@ -36,15 +36,21 @@ class ML5Server(Node):
     """
     def __init__(self):
         super().__init__('m5_server')
-        self.declare_parameter('use_espeak', True)
+        self.declare_parameter('use_espeak', False)
         self.declare_parameter('use_llama', False)
-        self.declare_parameter('use_whisper', True)
+        self.declare_parameter('use_whisper', False)
         self.declare_parameter('llama_instruct', False)
 
         self.use_espeak = self.get_parameter('use_espeak').value
         self.use_llama = self.get_parameter('use_llama').value
         self.use_whisper = self.get_parameter('use_whisper').value
         self.llama_instruct = self.get_parameter('llama_instruct').value
+
+        if not self.use_espeak and not self.use_whisper and not self.use_whisper:
+            self.get_logger().warn(
+                "No backends are enabled. Please enable at least one backend "
+                "by setting the appropriate parameters."
+            )
 
         if not self.use_llama and self.llama_instruct:
             self.get_logger().warn(
