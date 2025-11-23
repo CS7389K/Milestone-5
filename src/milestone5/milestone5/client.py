@@ -121,30 +121,30 @@ def main(args=None):
 
     file_name = "voice_input.wav"
     while True:
-        input, user_input = "", ""
+        final_input, user_input = "", ""
         print("Prompt (or type 's' to detect voice): ")
         while user_input != "END":
             user_input = get_user_input()
             if user_input is None:
                 break
             if user_input != "END":
-                input += user_input + "\n"
+                final_input += user_input + "\n"
 
         if user_input is None:
             break
 
-        if user_input.lower() == "s":
+        if final_input.lower() == "s":
             # Record audio from microphone
             client("espeak", "speak in voice now")
             record_audio_and_saveas(file_name)
             # Transcribe audio file with whisper
-            user_input = client("whisper", file_name)
+            final_input = client("whisper", file_name)
 
         if client.use_llama:
-            prompt_assistant(client, user_input)
+            prompt_assistant(client, final_input)
         else:
             client("espeak", "Robot speaking.")
-            client("espeak", user_input)
+            client("espeak", final_input)
 
     client.destroy_node()
     rclpy.shutdown()
