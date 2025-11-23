@@ -85,7 +85,7 @@ class ML5Client(Node):
 
     def _feedback_callback(self, feedback_msg):
         feedback = feedback_msg.feedback
-        self.get_logger().info('Received error feedback: {0}'.format(feedback))
+        self.get_logger().info('Received feedback: {0}'.format(feedback))
 
     def __call__(
             self,
