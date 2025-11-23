@@ -13,7 +13,7 @@ class LlamaBackend():
             n_gpu_layers : int = 33,
             use_mlock : bool = False,
         ):
-        if type(model_path, str):
+        if isinstance(model_path, str):
             model_path = Path(model_path)
         assert model_path.is_file(), f"Model path '{model_path}' is not a valid file."
 
