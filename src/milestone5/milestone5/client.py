@@ -77,7 +77,7 @@ class ML5Client(Node):
 
         self.get_logger().info(f"{str(type(ActionType))} request accepted")
 
-        return result
+        return result.result
 
     def _feedback_callback(self, feedback_msg):
         feedback = feedback_msg.feedback
@@ -103,7 +103,7 @@ class ML5Client(Node):
         elif client == 'whisper' and self.use_whisper:
             result = self._request_blocking(
                 self._whisper_client, WhisperAction, 'file_name', request
-            )
+            ).text
 
         return result
 
