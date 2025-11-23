@@ -35,11 +35,12 @@ class LlamaBackend():
             top_p : float = 0.95,
             stream : bool = True
         ) -> str:
-        response = self.llm(
+        chunks = self.llm(
             prompt,
             max_tokens=max_tokens,
             temperature=temperature,
             top_p=top_p,
             stream=stream
         )
-        return response['choices'][0]['text'].strip()
+        response = [c["choices"][0]["text"] for c in chunks]
+        return response
