@@ -6,7 +6,7 @@ from typing import Union
 class LlamaBackend():
 
     _MODEL_CHAT_PATH = "/home/nvidia/llama.cpp/models/llama-2-7b-chat.Q4_K_M.gguf"
-    _MODEL_INSTRUCT_PATH = "/home/nvidia/llama.cpp/models/llama-2-7b-instruct.q4_0.gguf"
+    _MODEL_INSTRUCT_PATH = "/home/nvidia/llama.cpp/models/llama-2-7b-instruct-q4_0.gguf"
 
     def __init__(
             self,
