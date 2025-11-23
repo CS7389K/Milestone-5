@@ -51,5 +51,6 @@ ros2 run milestone5 server --ros-args -p use_espeak:=true use_llama:=false -p us
 ```
 
 #### Client
-
+```sh
 ros2 run milestone5 client --ros-args -p use_espeak:=true use_llama:=false -p use_whisper:=true
+```
