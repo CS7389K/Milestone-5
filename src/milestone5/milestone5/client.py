@@ -132,6 +132,8 @@ def main(args=None):
             while user_input != "END":
                 final_input += user_input + "\n"
                 user_input = get_user_input()
+        else:
+            final_input = user_input
 
         if final_input == "s":
             # Record audio from microphone
