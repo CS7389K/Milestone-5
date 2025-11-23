@@ -123,7 +123,7 @@ def main(args=None):
     while True:
         final_input, user_input = "", ""
         print("Prompt (or type 's' to detect voice): ")
-        while user_input != "END":
+        while user_input != "END" or user_input != "s":
             user_input = get_user_input()
             if user_input is None:
                 break
