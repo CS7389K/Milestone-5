@@ -61,7 +61,7 @@ class ML5Server(Node):
                 self._callback_llama
             )
         if self.use_whisper:
-            device = "cuda" if not use_llama else "cpu"
+            device = "cuda" if not self.use_llama else "cpu"
             self._whisper = WhisperBackend(device=device)
             self._whisper_server = ActionServer(
                 self,
@@ -86,7 +86,7 @@ class ML5Server(Node):
             ctx.succeed()
         except Exception as e:
             error = str(e)
-            ctx.failed()
+            # ctx.failed()
 
         feedback = FeedbackType()
         setattr(feedback, feedback_attr, error)

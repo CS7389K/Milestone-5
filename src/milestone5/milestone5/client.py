@@ -99,11 +99,11 @@ class ML5Client(Node):
         if client == 'espeak' and self.use_espeak:
             result = self._request_blocking(
                 self._espeak_client, EspeakAction, 'text', request
-            )
+            ).result
         elif client == 'llama' and self.use_llama:
             result = self._request_blocking(
                 self._llama_client, LlamaAction, 'prompt', request
-            )
+            ).response
         elif client == 'whisper' and self.use_whisper:
             result = self._request_blocking(
                 self._whisper_client, WhisperAction, 'file_name', request
@@ -132,7 +132,7 @@ def main(args=None):
             # Transcribe audio file with whisper
             user_input = client("whisper", file_name)
 
-        if use_llama:
+        if client.use_llama:
             prompt_assistant(client, user_input)
         else:
             client("espeak", "Robot speaking.")
