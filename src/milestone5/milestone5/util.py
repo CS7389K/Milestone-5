@@ -1,6 +1,3 @@
-import sys
-import select
-
 import sounddevice as sd
 from scipy.io.wavfile import write
 from typing import Optional
@@ -21,21 +18,11 @@ def record_audio_and_saveas(
     write(file_name, sample_rate, audio)
 
 
-def get_user_input(
-        client,
-        file_name : str = "voice_input.wav",
-    ) -> Optional[str]:
+def get_user_input() -> Optional[str]:
     # Get user input
     text = input("You (type 's' to detect voice): ")
     if text.lower() in ("exit", "quit"):
         return None
-
-    elif text.lower() == "s":
-        client("espeak", "speak in voice now")
-        # Record audio from microphone
-        record_audio_and_saveas(file_name)
-        # Transcribe audio file with whisper
-        text = client("whisper", file_name)
 
     return text
 

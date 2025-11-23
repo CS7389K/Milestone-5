@@ -121,7 +121,7 @@ def main(args=None):
 
     file_name = "voice_input.wav"
     while True:
-        user_input = get_user_input(client)
+        user_input = get_user_input()
         if user_input is None:
             break
 
