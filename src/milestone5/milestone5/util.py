@@ -19,8 +19,7 @@ def record_audio_and_saveas(
 
 
 def get_user_input() -> Optional[str]:
-    # Get user input
-    text = input("You (type 's' to detect voice): ")
+    text = input()
     if text.lower() in ("exit", "quit"):
         return None
 
