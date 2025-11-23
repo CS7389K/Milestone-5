@@ -39,10 +39,12 @@ class ML5Server(Node):
         self.declare_parameter('use_espeak', True)
         self.declare_parameter('use_llama', False)
         self.declare_parameter('use_whisper', True)
+        self.declare_parameter('llama_instruct', True)
 
         self.use_espeak = self.get_parameter('use_espeak').value
         self.use_llama = self.get_parameter('use_llama').value
         self.use_whisper = self.get_parameter('use_whisper').value
+        self.llama_instruct = self.get_parameter('llama_instruct').value
         # Start all of the action servers
         if self.use_espeak:
             self._espeak = EspeakBackend()
@@ -53,7 +55,7 @@ class ML5Server(Node):
                 self._callback_espeak
             )
         if self.use_llama:
-            self._llama = LlamaBackend()
+            self._llama = LlamaBackend(instruct=self.llama_instruct)
             self._llama_server = ActionServer(
                 self,
                 LlamaAction,

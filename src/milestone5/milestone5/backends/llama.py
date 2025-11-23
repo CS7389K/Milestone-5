@@ -5,18 +5,29 @@ from typing import Union
 
 class LlamaBackend():
 
+    _MODEL_CHAT_PATH = "/home/nvidia/llama.cpp/models/llama-2-7b-chat.Q4_K_M.gguf"
+    _MODEL_INSTRUCT_PATH = "/home/nvidia/llama.cpp/models/llama-2-7b-chat.Q4_K_M.gguf"
+
     def __init__(
             self,
-            model_path : Union[Path, str] = "/home/nvidia/llama.cpp/models/llama-2-7b-chat.Q4_K_M.gguf",
+            model_path : Union[Path, str] = "",
+            instruct : bool = True,
             n_ctx : int = 512,
             n_threads : int = 4,
             n_gpu_layers : int = 33,
             seed=42,
             use_mlock : bool = True,
         ):
-        if isinstance(model_path, str):
-            model_path = Path(model_path)
-        # assert not model_path.exists(), f"Model path '{model_path}' is not a valid file."
+
+        if len(model_path) == 0:
+            if instruct:
+                model_path = Path(self._MODEL_INSTRUCT_PATH)
+            else:
+                model_path = Path(self._MODEL_CHAT_PATH)
+        else:
+            if isinstance(model_path, str):
+                model_path = Path(model_path)
+            # assert not model_path.exists(), f"Model path '{model_path}' is not a valid file."
 
         self.llm = Llama(
             model_path=str(model_path),
