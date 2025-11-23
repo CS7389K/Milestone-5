@@ -34,18 +34,17 @@ class ML5Server(Node):
     """
     Message Types: https://docs.ros2.org/foxy/api/std_msgs/index-msg.html
     """
-    def __init__(
-            self,
-            use_espeak = True,
-            use_whisper = True,
-            use_llama = True,
-        ):
+    def __init__(self):
         super().__init__('m5_server')
-        self.use_espeak = use_espeak
-        self.use_whisper = use_whisper
-        self.use_llama = use_llama
+        self.declare_parameter('use_espeak', True)
+        self.declare_parameter('use_llama', False)
+        self.declare_parameter('use_whisper', True)
+
+        self.use_espeak = self.get_parameter('use_espeak').value
+        self.use_llama = self.get_parameter('use_llama').value
+        self.use_whisper = self.get_parameter('use_whisper').value
         # Start all of the action servers
-        if use_espeak:
+        if self.use_espeak:
             self._espeak = EspeakBackend()
             self._espeak_server = ActionServer(
                 self,
@@ -53,7 +52,7 @@ class ML5Server(Node):
                 'espeak_action',
                 self._callback_espeak
             )
-        if use_llama:
+        if self.use_llama:
             self._llama = LlamaBackend()
             self._llama_server = ActionServer(
                 self,
@@ -61,7 +60,7 @@ class ML5Server(Node):
                 'llama_action',
                 self._callback_llama
             )
-        if use_whisper:
+        if self.use_whisper:
             device = "cuda" if not use_llama else "cpu"
             self._whisper = WhisperBackend(device=device)
             self._whisper_server = ActionServer(
@@ -146,11 +145,7 @@ def main(args=None):
     rclpy.init(args=args)
 
     print("Initializing ML5 Server Node...")
-    server = ML5Server(
-        use_espeak=True,
-        use_llama=False,
-        use_whisper=True
-    )
+    server = ML5Server()
     print("ML5 Server Node Initialized.")
 
     rclpy.spin(server)

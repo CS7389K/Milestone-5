@@ -36,21 +36,21 @@ class ML5Client(Node):
     """
     Message Types: https://docs.ros2.org/foxy/api/std_msgs/index-msg.html
     """
-    def __init__(
-            self,
-            use_espeak = True,
-            use_whisper = True,
-            use_llama = True,
-        ):
+    def __init__(self):
         super().__init__('m5_client')
-        self.use_espeak = use_espeak
-        self.use_whisper = use_whisper
-        self.use_llama = use_llama
-        if use_espeak:
+        self.declare_parameter('use_espeak', True)
+        self.declare_parameter('use_llama', False)
+        self.declare_parameter('use_whisper', True)
+
+        self.use_espeak = self.get_parameter('use_espeak').value
+        self.use_llama = self.get_parameter('use_llama').value
+        self.use_whisper = self.get_parameter('use_whisper').value
+
+        if self.use_espeak:
             self._espeak_client = ActionClient(self, EspeakAction, 'espeak_action')
-        if use_llama:
+        if self.use_llama:
             self._llama_client = ActionClient(self, LlamaAction, 'llama_action')
-        if use_whisper:
+        if self.use_whisper:
             self._whisper_client = ActionClient(self, WhisperAction, 'whisper_action')
 
     def _request_blocking(
@@ -115,14 +115,8 @@ class ML5Client(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    use_llama = False
-
     print("Initializing ML5 Client Node...")
-    client = ML5Client(
-        use_espeak=True,
-        use_llama=use_llama,
-        use_whisper=True
-    )
+    client = ML5Client()
     print("ML5 Client Node Initialized.")
 
     file_name = "voice_input.wav"
