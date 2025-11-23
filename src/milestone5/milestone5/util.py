@@ -26,7 +26,7 @@ def get_user_input(
         file_name : str = "voice_input.wav",
     ) -> Optional[str]:
     # Get user input
-    text = input("You (type or 's'→voice): ")
+    text = input("You (type 's' to detect voice): ")
     if text.lower() in ("exit", "quit"):
         return None
 
