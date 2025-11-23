@@ -121,19 +121,20 @@ def main(args=None):
 
     file_name = "voice_input.wav"
     while True:
-        final_input, user_input = "", ""
-        print("Prompt (or type 's' to detect voice): ")
-        while user_input != "END" and user_input != "s":
-            user_input = get_user_input()
-            if user_input is None:
-                break
-            if user_input != "END":
-                final_input += user_input + "\n"
+        final_input = ""
 
+        print("Prompt (or type 's' to detect voice): ")
+        user_input = get_user_input()
         if user_input is None:
             break
 
-        if final_input.lower() == "s":
+        if user_input != "s":
+            while user_input != "END":
+                if user_input != "END":
+                    final_input += user_input + "\n"
+                user_input = get_user_input()
+
+        if final_input == "s":
             # Record audio from microphone
             client("espeak", "speak in voice now")
             record_audio_and_saveas(file_name)
