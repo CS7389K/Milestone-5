@@ -31,6 +31,6 @@ def prompt_assistant(
         prompt : str
     ) -> Optional[str]:
     response = client("llama", prompt).strip()
-    print("Prompt:", prompt)
-    print("Response:", response)
+    print("Prompt:\n", prompt, "\n")
+    print("Response:\n", response, "\n")
     client("espeak", response)
