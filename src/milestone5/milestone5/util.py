@@ -26,7 +26,7 @@ def get_user_input(
         file_name : str = "voice_input.wav",
     ) -> Optional[str]:
     # Prompt user for input
-    sys.stdout.write("\nYou (type or 's'/wait→voice): ")
+    sys.stdout.write("\nYou (type or 's'→voice): ")
     sys.stdout.flush()
     # Get user input
     ready, _, _ = select.select([sys.stdin], [], [], 5)

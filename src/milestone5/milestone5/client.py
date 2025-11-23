@@ -111,15 +111,17 @@ class ML5Client(Node):
 def main(args=None):
     rclpy.init(args=args)
 
+    use_llama = False
+
     print("Initializing ML5 Client Node...")
     client = ML5Client(
         use_espeak=True,
-        use_llama=False,
+        use_llama=use_llama,
         use_whisper=True
     )
     print("ML5 Client Node Initialized.")
-    file_name = "voice_input.wav"
 
+    file_name = "voice_input.wav"
     while True:
         user_input = get_user_input(client)
         if user_input is None:
@@ -132,7 +134,11 @@ def main(args=None):
             # Transcribe audio file with whisper
             user_input = client("whisper", file_name)
 
-        prompt_assistant(client, user_input)
+        if use_llama:
+            prompt_assistant(client, user_input)
+        else:
+            client("espeak:", "Robot speaking.")
+            client("espeak:", user_input)
 
     client.destroy_node()
     rclpy.shutdown()
